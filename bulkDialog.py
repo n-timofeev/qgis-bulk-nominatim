@@ -86,7 +86,7 @@ class BulkNominatimDialog(QDialog, FORM_CLASS):
             newfeature.setGeometry(QgsGeometry.fromPointXY(pt))
             lat = str(pt.y())
             lon = str(pt.x())
-            url = '{}?format=json&lat={}&lon={}&zoom=18&addressdetails={}'.format(self.settings.reverseURL(),lat,lon,showDetails)
+            url = '{}?format=json&lat={}&lon={}&zoom=18&addressdetails={}&accept-language={}'.format(self.settings.reverseURL(),lat,lon,showDetails,self.settings.language)
             jsondata = self.request(url)
             # print(jsondata)
             address = ''
@@ -194,9 +194,9 @@ class BulkNominatimDialog(QDialog, FORM_CLASS):
                     num = ''
                     name = ''
                     if street_num_idx  >= 0 and feature[street_num_idx]:
-                        num = ('{}'.format(feature[street_num_idx])).strip()
+                        num = str('{}'.format(feature[street_num_idx])).strip()
                     if feature[street_name_idx]:
-                        name = ('{}'.format(feature[street_name_idx])).strip()
+                        name = str('{}'.format(feature[street_name_idx])).strip()
                     street = num+' '+name
                     street = street.strip()
                     if street:
@@ -212,7 +212,7 @@ class BulkNominatimDialog(QDialog, FORM_CLASS):
                 if postal_idx >= 0:
                     url += self.formatParam('postalcode', feature[postal_idx])
                     
-            url += '&format=json&limit={}&polygon=0&addressdetails={}'.format(maxResults, showDetails)
+            url += '&format=json&limit={}&polygon=0&addressdetails={}&accept-language={}'.format(maxResults, showDetails, self.settings.language)
             jsondata = self.request(url)
 
             try:
@@ -323,8 +323,8 @@ class BulkNominatimDialog(QDialog, FORM_CLASS):
         for address in addresses:
             # Replace internal spaces with + signs
             address2 = re.sub('\s+', '+', address)
-            url = '{}?q={}&format=json&limit={}&polygon=0&addressdetails={}'.format(
-                self.settings.searchURL(), address2, maxResults, showDetails)
+            url = '{}?q={}&format=json&limit={}&polygon=0&addressdetails={}&accept-language={}'.format(
+                self.settings.searchURL(), address2, maxResults, showDetails, self.settings.language)
             jsondata = self.request(url)
             # print(jsondata)
             try:

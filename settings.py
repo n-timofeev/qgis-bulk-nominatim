@@ -18,9 +18,11 @@ class SettingsWidget(QDialog, FORM_CLASS):
         settings = QSettings()
         self.nominatimURL = settings.value('/BulkNominatim/URL', NOMURL)
         self.maxAddress = int(settings.value('/BulkNominatim/maxAddress', 100))
+        self.language = settings.value('/BulkNominatim/language', 'en')
         self.levelOfDetail = int(settings.value('/BulkNominatim/levelOfDetail', 18))
         self.nomServiceLineEdit.setText(self.nominatimURL)
         self.maxRequestLineEdit.setText(str(self.maxAddress))
+        self.languageLineEdit.setText(self.language)
         
     def accept(self):
         '''Accept the settings and save them for next time.'''
@@ -33,6 +35,8 @@ class SettingsWidget(QDialog, FORM_CLASS):
             self.maxAddress = 100
             self.maxRequestLineEdit.setText(str(self.maxAddress))
         settings.setValue('/BulkNominatim/maxAddress', self.maxAddress)
+        self.language = self.languageLineEdit.text().strip()
+        settings.setValue('/BulkNominatim/language', self.language)
         self.levelOfDetail = self.detailSpinBox.value()
         settings.setValue('/BulkNominatim/levelOfDetail', self.levelOfDetail)
         self.close()
@@ -40,6 +44,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
     def restore(self):
         self.nomServiceLineEdit.setText(NOMURL)
         self.maxRequestLineEdit.setText(str(100))
+        self.languageLineEdit.setText('en')
         self.detailSpinBox.setValue(18)
 
     def searchURL(self):
