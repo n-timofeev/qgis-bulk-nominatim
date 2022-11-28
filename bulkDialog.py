@@ -184,7 +184,7 @@ class BulkNominatimDialog(QDialog, FORM_CLASS):
         for feature in iter:
             self.isfirst = True
             if full_address_idx >= 0:
-                address = feature[full_address_idx].strip()
+                address = str(feature[full_address_idx]).strip()
                 address2 = re.sub('\s+', '+', address)
                 url = self.settings.searchURL() + '?q=' + address2
             else:
